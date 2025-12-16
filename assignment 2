@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node 
+{
+    char data;
+    struct Node *next;
+};
+struct Node *head = NULL;
+void insert(char ch)
+{
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = ch;
+    newNode->next = NULL;
+
+    if (head == NULL) 
+    {
+        head = newNode;
+    } 
+    else
+    {
+        struct Node *temp = head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+}
+void display() 
+{
+    struct Node *temp = head;
+    while (temp != NULL) 
+    {
+        printf("%c", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+void reverse()
+{
+    struct Node *prev = NULL, *curr = head, *next = NULL;
+    while (curr != NULL)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+    printf("Reversed Name: ");
+    display();
+}
+void firstChar()
+{
+    if (head != NULL)
+        printf("First Character: %c\n", head->data);
+}
+void lastChar() 
+{
+    if (head == NULL) return;
+    struct Node *temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    printf("Last Character: %c\n", temp->data);
+}
+void countChars() 
+{
+    int count = 0;
+    struct Node *temp = head;
+    while (temp != NULL) 
+    {
+        count++;
+        temp = temp->next;
+    }
+    printf("Total Characters: %d\n", count);
+}
+void displayVowels() 
+{
+    struct Node *temp = head;
+    printf("Vowels in the name: ");
+    while (temp != NULL)
+    {
+        char ch = tolower(temp->data);
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+            printf("%c ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+void removeLast()
+{
+    if (head == NULL) 
+    return;
+
+    if (head->next == NULL)
+    {
+        free(head);
+        head = NULL;
+    } 
+    else
+    {
+        struct Node *temp = head;
+        while (temp->next->next != NULL)
+            temp = temp->next;
+
+        free(temp->next);
+        temp->next = NULL;
+    }
+    printf("After removing last character: ");
+    display();
+}
+void appendChar(char ch) 
+{
+    insert(ch);
+    printf("After appending '%c': ", ch);
+    display();
+}
+
+int main()
+{
+    char name[50], newChar;
+
+    printf("Enter the name: ");
+    scanf("%s", name);
+
+    for (int i = 0; name[i] != '\0'; i++)
+        insert(name[i]);
+
+    printf("\nStored Name: ");
+    display();
+
+    reverse();
+    firstChar();
+    lastChar();
+    countChars();
+    displayVowels();
+
+    removeLast();
+
+    printf("Enter a character to append: ");
+    scanf(" %c", &newChar);
+    appendChar(newChar);
+
+    return 0;
+}
